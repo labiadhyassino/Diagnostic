@@ -588,7 +588,7 @@ export default function Home() {
                   <span style={{ width: `${progress}%` }} />
                 </div>
 
-                <article className={`question-card ${isArabic ? 'rtl-content' : ''}`} dir={isArabic ? 'rtl' : 'ltr'}>
+                <article className={`question-card ${isArabic ? 'rtl-content' : 'ltr-content'}`} dir={isArabic ? 'rtl' : 'ltr'}>
                   <GeometryFigure visual={currentQuestion.visual} />
                   <p>{currentQuestion.text}</p>
                   <div className="options">
@@ -632,7 +632,7 @@ export default function Home() {
         )}
 
         {stage === 'result' && (
-          <section id="resultats" className={`card ${isArabic ? 'rtl-content' : ''}`} dir={isArabic ? 'rtl' : 'ltr'}>
+          <section id="resultats" className={`card ${isArabic ? 'rtl-content' : 'ltr-content'}`} dir={isArabic ? 'rtl' : 'ltr'}>
             <div className="section-head">
               <span>03</span>
               <div>

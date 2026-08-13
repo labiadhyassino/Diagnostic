@@ -233,12 +233,17 @@ async function loadCurriculumContext(input: { schoolLevel: string; subject: stri
   const fallbackContext = curriculumHints[`${input.schoolLevel}-${input.subject}`] || 'Respecter le niveau scolaire indiqué et le programme tunisien.'
 
   if (!supabaseAdmin) {
+    console.log('[curriculum] Supabase admin unavailable, using fallback context', {
+      level: input.schoolLevel,
+      subject: input.subject,
+      language: input.languageCode,
+    })
     return fallbackContext
   }
 
   const { data, error } = await supabaseAdmin
     .from('curriculum_guides')
-    .select('title, summary, content_json')
+    .select('title, content_json')
     .eq('level', input.schoolLevel)
     .eq('subject', input.subject)
     .eq('language', input.languageCode)
@@ -246,17 +251,34 @@ async function loadCurriculumContext(input: { schoolLevel: string; subject: stri
 
   if (error) {
     console.error('Failed to load curriculum guide', error)
+    console.log('[curriculum] Failed to load guide, using fallback context', {
+      level: input.schoolLevel,
+      subject: input.subject,
+      language: input.languageCode,
+    })
     return fallbackContext
   }
 
   if (!data?.content_json) {
+    console.log('[curriculum] No matching guide found, using fallback context', {
+      level: input.schoolLevel,
+      subject: input.subject,
+      language: input.languageCode,
+    })
     return fallbackContext
   }
+
+  console.log('[curriculum] Guide loaded and sent to Gemini prompt', {
+    level: input.schoolLevel,
+    subject: input.subject,
+    language: input.languageCode,
+    title: data.title,
+    contentSize: JSON.stringify(data.content_json).length,
+  })
 
   return JSON.stringify(
     {
       title: data.title,
-      summary: data.summary,
       guide: data.content_json,
     },
     null,
@@ -276,6 +298,16 @@ export async function POST(request: Request) {
   const questionCount = Math.min(Math.max(body.questionCount || 5, 3), 8)
   const iteration = body.iteration || 1
   const curriculum = await loadCurriculumContext({ schoolLevel, subject, languageCode })
+
+  console.log('[gemini] Preparing question generation', {
+    level: schoolLevel,
+    subject,
+    language: languageCode,
+    iteration,
+    questionCount,
+    previousResultsCount: body.previousResults?.length || 0,
+    curriculumChars: curriculum.length,
+  })
 
   if (!apiKey || apiKey === 'your-gemini-api-key') {
     return fallback('GEMINI_API_KEY manquante ou invalide. Questions locales utilisées.')

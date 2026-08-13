@@ -797,6 +797,11 @@ h2 {
   text-align: right;
 }
 
+.ltr-content {
+  direction: ltr;
+  text-align: left;
+}
+
 .rtl-content .section-head,
 .rtl-content .quiz-top,
 .rtl-content .analysis-head,
