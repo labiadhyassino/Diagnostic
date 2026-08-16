@@ -96,6 +96,8 @@ const levels = [
   { value: '5AP', label: '5ème année primaire' },
   { value: '6AP', label: '6ème année primaire' },
   { value: '7B', label: '7ème année fondamentale' },
+  { value: '8B', label: '8ème année fondamentale' },
+  { value: '9B', label: '9ème année fondamentale' },
   { value: '1S', label: '1ère année secondaire' },
 ]
 
