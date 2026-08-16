@@ -871,6 +871,20 @@ h2 {
   border: 6px solid var(--green);
 }
 
+.math-power {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 1px;
+  direction: ltr;
+  unicode-bidi: isolate;
+  white-space: nowrap;
+}
+
+.math-power sup {
+  font-size: 0.62em;
+  line-height: 1;
+}
+
 .nav-row {
   justify-content: space-between;
 }

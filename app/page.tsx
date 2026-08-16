@@ -101,6 +101,41 @@ const levels = [
 
 const subjects = ['Mathématiques', 'Français', 'Arabe', 'Sciences', 'Anglais']
 
+const powerNotationPattern = /(\d+(?:[.,]\d+)?)\s*(\^|أُس|اُس|إس|أس|اس|وس|os|puissance)\s*(-?\d+)/giu
+
+function renderMathText(text: string) {
+  const parts = []
+  let lastIndex = 0
+
+  for (const match of text.matchAll(powerNotationPattern)) {
+    const index = match.index || 0
+    const [raw, base, , exponent] = match
+
+    if (index > lastIndex) {
+      parts.push(text.slice(lastIndex, index))
+    }
+
+    parts.push(
+      <span className="math-power" dir="ltr" key={`${raw}-${index}`}>
+        {base}
+        <sup>{exponent}</sup>
+      </span>,
+    )
+
+    lastIndex = index + raw.length
+  }
+
+  if (!parts.length) {
+    return text
+  }
+
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex))
+  }
+
+  return parts
+}
+
 function GeometryFigure({ visual }: { visual?: Visual }) {
   if (!visual || visual.type === 'none') {
     return null
@@ -590,7 +625,7 @@ export default function Home() {
 
                 <article className={`question-card ${isArabic ? 'rtl-content' : 'ltr-content'}`} dir={isArabic ? 'rtl' : 'ltr'}>
                   <GeometryFigure visual={currentQuestion.visual} />
-                  <p>{currentQuestion.text}</p>
+                  <p>{renderMathText(currentQuestion.text)}</p>
                   <div className="options">
                     {currentQuestion.options.map(option => (
                       <button
@@ -600,7 +635,7 @@ export default function Home() {
                         onClick={() => handleAnswer(option)}
                       >
                         <span className="radio-dot" />
-                        <span>{option}</span>
+                        <span>{renderMathText(option)}</span>
                       </button>
                     ))}
                   </div>
