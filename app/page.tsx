@@ -103,26 +103,34 @@ const levels = [
 
 const subjects = ['Mathématiques', 'Français', 'Arabe', 'Sciences', 'Anglais']
 
-const powerNotationPattern = /(\d+(?:[.,]\d+)?)\s*(\^|أُس|اُس|إس|أس|اس|وس|os|puissance)\s*(-?\d+)/giu
+const mathTokenPattern = /(\d+(?:[.,]\d+)?)\s*(\^|أُس|اُس|إس|أس|اس|وس|os|puissance)\s*(-?\d+)|(?<![\w\d])([+\-−]\d+(?:[.,]\d+)?)(?![\w\d])/giu
 
 function renderMathText(text: string) {
   const parts = []
   let lastIndex = 0
 
-  for (const match of text.matchAll(powerNotationPattern)) {
+  for (const match of text.matchAll(mathTokenPattern)) {
     const index = match.index || 0
-    const [raw, base, , exponent] = match
+    const [raw, base, , exponent, signedNumber] = match
 
     if (index > lastIndex) {
       parts.push(text.slice(lastIndex, index))
     }
 
-    parts.push(
-      <span className="math-power" dir="ltr" key={`${raw}-${index}`}>
-        {base}
-        <sup>{exponent}</sup>
-      </span>,
-    )
+    if (base && exponent) {
+      parts.push(
+        <span className="math-power" dir="ltr" key={`${raw}-${index}`}>
+          {base}
+          <sup>{exponent}</sup>
+        </span>,
+      )
+    } else {
+      parts.push(
+        <span className="math-number" dir="ltr" key={`${raw}-${index}`}>
+          {signedNumber.replace('−', '-')}
+        </span>,
+      )
+    }
 
     lastIndex = index + raw.length
   }

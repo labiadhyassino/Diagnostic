@@ -81,6 +81,7 @@ Règles de langue:
 - Si la langue est française, écris les champs visibles par l'élève en français.
 - Les champs techniques peuvent rester en français.
 - Pour les puissances, utilise toujours la notation avec accent circonflexe dans le JSON, par exemple "5^3", "2^4" ou "10^2". N'écris pas "5 أس 3", "5 puissance 3" ou "5 os 3".
+- Pour les nombres négatifs, utilise toujours la notation standard "-9", "-3" ou "-2,5". N'écris jamais "9-", "3-" ou "2,5-".
 
 Règles pour les figures:
 - Ne génère jamais d'image, de SVG, de HTML ou de code.

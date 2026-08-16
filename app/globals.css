@@ -885,6 +885,13 @@ h2 {
   line-height: 1;
 }
 
+.math-number {
+  display: inline-block;
+  direction: ltr;
+  unicode-bidi: isolate;
+  white-space: nowrap;
+}
+
 .nav-row {
   justify-content: space-between;
 }
