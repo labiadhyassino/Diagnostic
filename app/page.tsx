@@ -92,6 +92,7 @@ const languages = [
 
 const levels = [
   { value: '1AP', label: '1ère année primaire' },
+  { value: '3AP', label: '3ème année primaire' },
   { value: '4AP', label: '4ème année primaire' },
   { value: '5AP', label: '5ème année primaire' },
   { value: '6AP', label: '6ème année primaire' },
